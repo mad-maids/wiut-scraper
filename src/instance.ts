@@ -1,4 +1,5 @@
 import { Page } from "playwright";
+import Timetable from "@/timetable";
 
 type Codes = {
   [key: string]: string;
@@ -46,6 +47,10 @@ class Instance {
   public getCodes(): Codes {
     return this.codes;
   }
+
+  // public getTimetable(): Timetable {
+  //   return new Timetable(this.codes);
+  // }
 }
 
 export default Instance;
