@@ -1,26 +1,49 @@
 import { Page } from 'playwright'
 import Timetable from '@/timetable'
 
-type Codes = {
-  [key: string]: string
-}
+type Codes = Map<string, string>
 
 class Instance {
   private readonly codes: Codes
 
   constructor() {
-    this.codes = {}
+    this.codes = new Map<string, string>()
   }
 
-  public async auth(page: Page): Promise<void> {
+  /**
+   * Try to authenticate to the intranet as humanly as possible
+   * @param page Page object
+   * @param login Login
+   * @param password Password
+   */
+  public async auth(
+    page: Page,
+    login: string,
+    password: string,
+  ): Promise<void> {
     await page.goto('https://intranet.wiut.uz/Account/Login?ReturnUrl=%2f')
-    await page.fill('#user', <string>process.env.LOGIN)
-    await page.fill('#pass', <string>process.env.PASSWORD)
+
+    // Hold on for a second
+    await page.waitForTimeout(1000)
+
+    // Fill in the login and password fields
+    await page.fill('#user', login)
+    await page.fill('#pass', password)
+
+    // Hold on for a second again
+    await page.waitForTimeout(1000)
+
+    // Click the login button
     await page.click('xpath=/html/body/div[1]/div/div/div/div/form/button')
 
-    // Those bitches limited the request time to 5 seconds
-    await page.waitForTimeout(5000)
+    // Those bitches limited the request time to 2 seconds
+    await page.waitForTimeout(2000)
+
+    // Go to home page
     await page.goto('https://intranet.wiut.uz/')
+
+    // Hold on for a second again again
+    await page.waitForTimeout(1000)
   }
 
   public async collect(page: Page): Promise<void> {
@@ -41,7 +64,7 @@ class Instance {
     )
 
     for (let i = 0; i < 179; i++) {
-      this.codes[courses[i]] = codes[i]
+      this.codes.set(courses[i], codes[i])
     }
   }
 
@@ -54,10 +77,30 @@ class Instance {
     return this.codes
   }
 
+  public getCode(group: string): string | undefined {
+    return this.codes.get(group)
+  }
+
+  private async goToPage(page: Page, url: string, attempt = 5): Promise<void> {
+    for (let i = 0; i < attempt; i++) {
+      try {
+        await page.goto(url);
+        return;
+      } catch (error: any) {
+        console.error(`Attempt ${i+1} failed with error: ${error.message}`);
+        await page.waitForTimeout(2000);
+      }
+    }
+    throw new Error(`Failed to navigate to ${url} after ${attempt} retries`);
+
+  }
+
   public async getTimetable(group: string, page: Page): Promise<Timetable> {
-    await page.goto(
-      `https://intranet.wiut.uz/TimeTableNew/GetLessons?classid=${group}`,
-    )
+    // await page.goto(
+    //   `https://intranet.wiut.uz/TimeTableNew/GetLessons?classid=${group}`,
+    //   { timeout: 60000 }
+    // )
+    await this.goToPage(page, `https://intranet.wiut.uz/TimeTableNew/GetLessons?classid=${group}`)
 
     return await Timetable.fromHTML(page)
   }

@@ -1,4 +1,4 @@
-const REMOVE_BRACKETS = new RegExp('s?(s?d+s?)')
+const REMOVE_BRACKETS = /\s?\(\s?\d+\s?\)/
 
 class Lesson {
   public name: string
@@ -9,9 +9,9 @@ class Lesson {
   public location: string
 
   constructor(start: number, data: string[]) {
-    let [name, format] = Lesson.processClass(data[1].trim())
-    let tutor = data[2].trim()
-    let location = data[0].replace(REMOVE_BRACKETS, '').trim()
+    const [name, format] = Lesson.processClass(data[1].trim())
+    const tutor = data[2].trim()
+    const location = data[0].replace(REMOVE_BRACKETS, '').trim()
 
     this.name = name
     this.type = format
@@ -25,15 +25,20 @@ class Lesson {
     let klass: string
     let format: string = ''
 
+    console.log("Input:", `(${input})`)
+
     if (input.toLowerCase().startsWith('online_')) {
       format = 'online'
-      klass = input.split('_', 1)[1]
+      klass = input.split('_')[1]
     } else if (input.toLowerCase().startsWith('online /')) {
-      format += 'online '
-      klass = input.split('/ ', 1)[1]
+      format += 'online'
+      klass = input.split(' / ')[1]
     } else {
       klass = input
     }
+
+    console.log("Class:", `(${klass})`)
+    console.log("Format:", `(${format})`)
 
     const array_cn = klass.split('_', 2)
     let name = array_cn[0].trim()

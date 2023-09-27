@@ -3,7 +3,7 @@ import saturatingSub from '@/utils/saturating'
 import { Page } from 'playwright'
 
 type Day = Lesson[]
-const GROUP_RE = new RegExp('d(CIFS|BABM|BIS|CL|ECwF|Fin|BM(Fin|Mar))d+')
+const GROUP_RE = /\d(CIFS|BABM|BIS|CL|ECwF|Fin|BM(Fin|Mar))\d+/
 
 class Timetable {
   public monday: Day
@@ -25,7 +25,7 @@ class Timetable {
   }
 
   static async fromHTML(page: Page): Promise<Timetable> {
-    let timetable = new Timetable()
+    const timetable = new Timetable()
 
     const rows = await page.$$('div.row.cf:not(:first-child)')
 
@@ -37,14 +37,14 @@ class Timetable {
 
       const slots = []
       for (const slotElement of slotsElements) {
-        const texts = await slotElement.$$eval('p', (elements) =>
+        const texts = await slotElement.$$eval('div', (elements) =>
           elements.map((e) => e.textContent),
         )
+        
         slots.push(texts)
       }
 
-      // @ts-ignore
-      const day = timetable.getDayLessons(slots!)
+      const day = timetable.getDayLessons(<string[][]>slots!)
 
       switch (index) {
         case 0:
@@ -80,19 +80,19 @@ class Timetable {
 
     let lastSlotLessons = 0
     slots.forEach((slot, offset) => {
-      let lessons = this.processSlot(slot, offset)
-      let numberOfLessons = lessons.length
+      const lessons = this.processSlot(slot, offset)
+      const numberOfLessons = lessons.length
 
       lessons.forEach((lesson) => {
         let lessonProlonged = false
 
         // to check if one of the previous lessons should be prolonged
-        let start = saturatingSub(
+        const start = saturatingSub(
           day.length,
           numberOfLessons + lastSlotLessons - 1,
         )
         for (let index = start; index < day.length; index++) {
-          let previousLesson = day[index]
+          const previousLesson = day[index]
           if (lesson.isContinuation(previousLesson)) {
             previousLesson.prolong()
             lessonProlonged = true
