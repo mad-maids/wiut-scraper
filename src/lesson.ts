@@ -25,20 +25,15 @@ class Lesson {
     let klass: string
     let format: string = ''
 
-    console.log("Input:", `(${input})`)
-
     if (input.toLowerCase().startsWith('online_')) {
-      format = 'online'
+      format = 'online '
       klass = input.split('_')[1]
     } else if (input.toLowerCase().startsWith('online /')) {
-      format += 'online'
+      format += 'online '
       klass = input.split(' / ')[1]
     } else {
       klass = input
     }
-
-    console.log("Class:", `(${klass})`)
-    console.log("Format:", `(${format})`)
 
     const array_cn = klass.split('_', 2)
     let name = array_cn[0].trim()
@@ -47,13 +42,25 @@ class Lesson {
       name += 'viour'
     }
 
-    if (array_cn[1].includes('lec_')) {
-      format += 'lecture'
-    } else if (array_cn[1].includes('w_')) {
-      format += 'workshop'
-    } else {
-      format += 'seminar'
+    try {
+      if (array_cn[1].includes('lec_')) {
+        format += 'lecture'
+      } else if (array_cn[1].includes('w_')) {
+        format += 'workshop'
+      } else {
+        format += 'seminar'
+      }
+    } catch (error) {
+      console.log("Input:", `(${input})`)
+      console.log("Class:", klass)
+      console.log("Name:", name)
+      console.log("Array CN: ", array_cn)
     }
+
+    console.log("Input:", `(${input})`)
+    console.log("Class:", klass)
+    console.log("Name:", name)
+    console.log("Array CN: ", array_cn)
 
     return [name, format]
   }

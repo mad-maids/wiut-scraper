@@ -3,7 +3,7 @@ import saturatingSub from '@/utils/saturating'
 import { Page } from 'playwright'
 
 type Day = Lesson[]
-const GROUP_RE = /\d(CIFS|BABM|BIS|CL|ECwF|Fin|BM(Fin|Mar))\d+/
+const GROUP_RE = /\d(CIFS|BABM|BALaw|BSc(Finance|BIS|EC with Finance)|BIS|CL|ECwF|Fin|BM(Fin|Mar)|BABM with (Finance|Marketing))\d+/
 
 class Timetable {
   public monday: Day

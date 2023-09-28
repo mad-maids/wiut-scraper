@@ -4,6 +4,7 @@ import sleep from '@/utils/sleep'
 import fs, { promises as asyncFs } from 'fs'
 import { Browser, BrowserContext, chromium, Page } from 'playwright'
 import Timetable from "@/timetable";
+import * as util from "util";
 
 import('dotenv').then((dot) => {
   dot.config()
