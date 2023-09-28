@@ -50,27 +50,25 @@ class Lesson {
       } else {
         format += 'seminar'
       }
-    } catch (error) {
-      console.log("Input:", `(${input})`)
-      console.log("Class:", klass)
-      console.log("Name:", name)
-      console.log("Array CN: ", array_cn)
+    } catch (error: any) {
+      console.warn("Input:", `(${input})`, "\n", "Class:", klass, "\n", "Name:", name, "\n", "Array CN: ", array_cn)
+      throw new Error(error)
     }
-
-    console.log("Input:", `(${input})`)
-    console.log("Class:", klass)
-    console.log("Name:", name)
-    console.log("Array CN: ", array_cn)
 
     return [name, format]
   }
 
   isContinuation(lesson: Lesson): boolean {
-    return (
-      this.name === lesson.name &&
-      this.type === lesson.type &&
-      this.start === lesson.start + 1.0
-    )
+    try {
+      return (
+        this.name === lesson.name &&
+        this.type === lesson.type &&
+        this.start === lesson.start + 1.0
+      )
+    } catch (error: any) {
+      console.warn("This:", this, "\n\n", "Lesson:", lesson)
+      throw new Error(error)
+    }
   }
 
   prolong() {
