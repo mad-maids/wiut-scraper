@@ -13,8 +13,8 @@ jobs:
       repo-updated: ${{ steps.git-step.outputs.updated }}
 
     env:
-      LOGIN: ${{ secrets.STUDENT_ID }}
-      PASSWORD: ${{ secrets.STUDENT_PASSWORD }}
+      LOGIN: ${{ secrets.LOGIN }}
+      PASSWORD: ${{ secrets.PASSWORD }}
 
     steps:
       - name: Show secrets
