@@ -1,5 +1,5 @@
-import test from 'node:test'
-import * as assert from 'assert'
+import test from "node:test"
+import * as assert from "assert"
 
 /**
  * Split a string into an array of substrings, each of length n.

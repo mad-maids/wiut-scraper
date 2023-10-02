@@ -1,6 +1,6 @@
-import Lesson from './lesson'
-import saturatingSub from '@/utils/saturating'
-import { Page } from 'playwright'
+import Lesson from "./lesson"
+import saturatingSub from "@/utils/saturating"
+import { Page } from "playwright"
 
 type Day = Lesson[]
 const GROUP_RE =
@@ -28,17 +28,17 @@ class Timetable {
   static async fromHTML(page: Page): Promise<Timetable> {
     const timetable = new Timetable()
 
-    const rows = await page.$$('div.row.cf:not(:first-child)')
+    const rows = await page.$$("div.row.cf:not(:first-child)")
 
     for (let index = 0; index < rows.length; index++) {
       const row = rows[index]
 
       // Fetch all slots except the first one which has weekday info
-      const slotsElements = await row.$$('div.col:not(:first-child) .innerbox')
+      const slotsElements = await row.$$("div.col:not(:first-child) .innerbox")
 
       const slots = []
       for (const slotElement of slotsElements) {
-        const texts = await slotElement.$$eval('div', (elements) =>
+        const texts = await slotElement.$$eval("div", (elements) =>
           elements.map((e) => e.textContent),
         )
 
@@ -68,7 +68,7 @@ class Timetable {
           break
         default:
           throw new Error(
-            'More than 6 rows found, is WIUT having lessons on Sunday now?',
+            "More than 6 rows found, is WIUT having lessons on Sunday now?",
           )
       }
     }
@@ -117,11 +117,11 @@ class Timetable {
 
   private processSlot(slot: string[], offset: number): Array<Lesson> {
     const data = slot.filter(
-      (text) => !(text.trim() === '' || GROUP_RE.test(text)),
+      (text) => !(text.trim() === "" || GROUP_RE.test(text)),
     )
 
     if (data.length === 2) {
-      data.push('John Cena')
+      data.push("John Cena")
     }
 
     const lessons: Lesson[] = []

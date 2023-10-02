@@ -1,4 +1,4 @@
-import splitN from '@/utils/split-n'
+import splitN from "@/utils/split-n"
 
 const REMOVE_BRACKETS = /\s?\(\s?\d+\s?\)/
 
@@ -13,7 +13,7 @@ class Lesson {
   constructor(start: number, data: string[]) {
     const [name, format] = Lesson.processClass(data[1].trim())
     const tutor = data[2].trim()
-    const location = data[0].replace(REMOVE_BRACKETS, '').trim()
+    const location = data[0].replace(REMOVE_BRACKETS, "").trim()
 
     this.name = name
     this.type = format
@@ -25,31 +25,31 @@ class Lesson {
 
   static processClass(input: string): [string, string] {
     let klass: string
-    let format: string = ''
+    let format: string = ""
 
-    if (input.toLowerCase().startsWith('online_')) {
-      format = 'online '
-      klass = splitN(input, '_', 1)[1]
-    } else if (input.toLowerCase().startsWith('online /')) {
-      format += 'online '
-      klass = splitN(input, ' / ', 1)[1]
+    if (input.toLowerCase().startsWith("online_")) {
+      format = "online "
+      klass = splitN(input, "_", 1)[1]
+    } else if (input.toLowerCase().startsWith("online /")) {
+      format += "online "
+      klass = splitN(input, " / ", 1)[1]
     } else {
       klass = input
     }
 
-    const array_cn = splitN(klass, '_', 2)
+    const array_cn = splitN(klass, "_", 2)
     let name = array_cn[0].trim()
 
-    if (name.endsWith('Beha')) {
-      name += 'viour'
+    if (name.endsWith("Beha")) {
+      name += "viour"
     }
 
-    if (array_cn[1].includes('lec_')) {
-      format += 'lecture'
-    } else if (array_cn[1].includes('w_')) {
-      format += 'workshop'
+    if (array_cn[1].includes("lec_")) {
+      format += "lecture"
+    } else if (array_cn[1].includes("w_")) {
+      format += "workshop"
     } else {
-      format += 'seminar'
+      format += "seminar"
     }
 
     return [name, format]
