@@ -87,7 +87,11 @@ class Instance {
     return this.codes.get(group)
   }
 
-  protected async goToPage(page: Page, url: string, attempt = 5): Promise<void> {
+  protected async goToPage(
+    page: Page,
+    url: string,
+    attempt = 5,
+  ): Promise<void> {
     for (let i = 0; i < attempt; i++) {
       try {
         await page.goto(url)

@@ -8,7 +8,7 @@ async function main(page: Page): Promise<void> {
   const COURSE_REGEX = /[3-6]\D+/
   const location = path.join("./data", "groups")
 
-  let json: string = "";
+  let json: string = ""
 
   if (!process.env.LOGIN || !process.env.PASSWORD) {
     throw new Error("LOGIN or PASSWORD environment variables are not set.")
@@ -32,17 +32,21 @@ async function main(page: Page): Promise<void> {
 
   // Write codes to ./data/groups.json
   json = JSON.stringify(Array.from(codes.keys()), null, 2)
-  await asyncFs.writeFile(path.join(location, "groups.json"), json, { encoding: "utf-8" })
+  await asyncFs.writeFile(path.join(location, "groups.json"), json, {
+    encoding: "utf-8",
+  })
 
   // Groups with codes
-  const groupsWithCodes: Record<string, string> = {};
+  const groupsWithCodes: Record<string, string> = {}
 
   for (const code of codes.keys()) {
     groupsWithCodes[code] = <string>codes.get(code)
   }
 
   json = JSON.stringify(groupsWithCodes, null, 2)
-  await asyncFs.writeFile(path.join(location, "groups-with-codes.json"), json, { encoding: "utf-8" })
+  await asyncFs.writeFile(path.join(location, "groups-with-codes.json"), json, {
+    encoding: "utf-8",
+  })
 }
 
 export default main

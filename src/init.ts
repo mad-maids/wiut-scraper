@@ -12,7 +12,7 @@ async function init(): Promise<[Browser, BrowserContext, Page]> {
   const context: BrowserContext = await browser.newContext()
   const page: Page = await context.newPage()
 
-  return [ browser, context, page ]
+  return [browser, context, page]
 }
 
 export default init
