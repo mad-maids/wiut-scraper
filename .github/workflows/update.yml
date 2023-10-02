@@ -52,7 +52,7 @@ jobs:
       - name: Run the scraper
         run: xvfb-run pnpm start
 
-      - name: Checkout code
+      - name: Clone data repo
         uses: actions/checkout@v2
         with:
           path: dest
