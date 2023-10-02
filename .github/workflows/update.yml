@@ -17,6 +17,11 @@ jobs:
       PASSWORD: ${{ secrets.STUDENT_PASSWORD }}
 
     steps:
+      - name: Show secrets
+        run: |
+          echo $LOGIN
+          echo $PASSWORD
+
       - name: Checkout code
         uses: actions/checkout@v2
 
