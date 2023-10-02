@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      packages: write
+      contents: write
 
     outputs:
       repo-updated: ${{ steps.git-step.outputs.updated }}
@@ -21,13 +21,8 @@ jobs:
       PASSWORD: ${{ secrets.PASSWORD }}
 
     steps:
-      - name: Show secrets
-        run: |
-          echo $LOGIN
-          echo $PASSWORD
-
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Install Node.js
         uses: actions/setup-node@v3
@@ -57,12 +52,12 @@ jobs:
         run: xvfb-run pnpm start
 
       - name: Clone data repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           path: dest
           repository: mad-maids/wiut-data
           ref: main
-          fetch-depth: 0
+          fetch-depth: 1
 
       - name: Remove old data if exists
         run: |
@@ -84,7 +79,6 @@ jobs:
           git add .
           [[ -z $(git status -uno --porcelain) ]] && echo "No updates detected, no need for push" && exit 0;
           git commit -m "update timetable $(date -u)"
-          # git remote set-url origin https://x-access-token:${{ secrets.GH }}@github.com/mad-maids/wiut-data.git
           git push origin main --force
           echo "::set-output name=updated::yes"
 

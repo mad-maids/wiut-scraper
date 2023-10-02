@@ -50,7 +50,7 @@ if (!LOGIN || !PASSWORD) {
       codes.delete(group)
     }
   }
-  
+
   // Display codes in console
   console.log(util.inspect(instance, false, null, true))
 
