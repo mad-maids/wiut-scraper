@@ -44,6 +44,13 @@ if (!LOGIN || !PASSWORD) {
     }
   }
 
+  // Remove all codes that doesn't start with number 4
+  for (const group of codes.keys()) {
+    if (!group.match(/4\D+/)) {
+      codes.delete(group)
+    }
+  }
+  
   // Display codes in console
   console.log(util.inspect(instance, false, null, true))
 
