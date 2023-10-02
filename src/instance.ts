@@ -84,15 +84,14 @@ class Instance {
   private async goToPage(page: Page, url: string, attempt = 5): Promise<void> {
     for (let i = 0; i < attempt; i++) {
       try {
-        await page.goto(url);
-        return;
+        await page.goto(url)
+        return
       } catch (error: any) {
-        console.error(`Attempt ${i+1} failed with error: ${error.message}`);
-        await page.waitForTimeout(2000);
+        console.error(`Attempt ${i + 1} failed with error: ${error.message}`)
+        await page.waitForTimeout(2000)
       }
     }
-    throw new Error(`Failed to navigate to ${url} after ${attempt} retries`);
-
+    throw new Error(`Failed to navigate to ${url} after ${attempt} retries`)
   }
 
   public async getTimetable(group: string, page: Page): Promise<Timetable> {
@@ -100,7 +99,10 @@ class Instance {
     //   `https://intranet.wiut.uz/TimeTableNew/GetLessons?classid=${group}`,
     //   { timeout: 60000 }
     // )
-    await this.goToPage(page, `https://intranet.wiut.uz/TimeTableNew/GetLessons?classid=${group}`)
+    await this.goToPage(
+      page,
+      `https://intranet.wiut.uz/TimeTableNew/GetLessons?classid=${group}`,
+    )
 
     return await Timetable.fromHTML(page)
   }

@@ -1,3 +1,5 @@
+import splitN from '@/utils/split-n'
+
 const REMOVE_BRACKETS = /\s?\(\s?\d+\s?\)/
 
 class Lesson {
@@ -27,48 +29,39 @@ class Lesson {
 
     if (input.toLowerCase().startsWith('online_')) {
       format = 'online '
-      klass = input.split('_')[1]
+      klass = splitN(input, '_', 1)[1]
     } else if (input.toLowerCase().startsWith('online /')) {
       format += 'online '
-      klass = input.split(' / ')[1]
+      klass = splitN(input, ' / ', 1)[1]
     } else {
       klass = input
     }
 
-    const array_cn = klass.split('_', 2)
+    const array_cn = splitN(klass, '_', 2)
     let name = array_cn[0].trim()
 
     if (name.endsWith('Beha')) {
       name += 'viour'
     }
 
-    try {
-      if (array_cn[1].includes('lec_')) {
-        format += 'lecture'
-      } else if (array_cn[1].includes('w_')) {
-        format += 'workshop'
-      } else {
-        format += 'seminar'
-      }
-    } catch (error: any) {
-      console.warn("Input:", `(${input})`, "\n", "Class:", klass, "\n", "Name:", name, "\n", "Array CN: ", array_cn)
-      throw new Error(error)
+    if (array_cn[1].includes('lec_')) {
+      format += 'lecture'
+    } else if (array_cn[1].includes('w_')) {
+      format += 'workshop'
+    } else {
+      format += 'seminar'
     }
 
     return [name, format]
   }
 
   isContinuation(lesson: Lesson): boolean {
-    try {
-      return (
-        this.name === lesson.name &&
-        this.type === lesson.type &&
-        this.start === lesson.start + 1.0
-      )
-    } catch (error: any) {
-      console.warn("This:", this, "\n\n", "Lesson:", lesson)
-      throw new Error(error)
-    }
+    return (
+      this.name === lesson.name &&
+      this.type === lesson.type &&
+      this.location === lesson.location &&
+      this.start === lesson.start + 1.0
+    )
   }
 
   prolong() {

@@ -3,7 +3,8 @@ import saturatingSub from '@/utils/saturating'
 import { Page } from 'playwright'
 
 type Day = Lesson[]
-const GROUP_RE = /\d(CIFS|BABM|BALaw|BSc(Finance|BIS|EC with Finance)|BIS|CL|ECwF|Fin|BM(Fin|Mar)|BABM with (Finance|Marketing))\d+/
+const GROUP_RE =
+  /\d(CIFS|BABM|BALaw|BSc(Finance|BIS|EC with Finance)|BIS|CL|ECwF|Fin|BM(Fin|Mar)|BABM with (Finance|Marketing))\d+/
 
 class Timetable {
   public monday: Day
@@ -40,7 +41,7 @@ class Timetable {
         const texts = await slotElement.$$eval('div', (elements) =>
           elements.map((e) => e.textContent),
         )
-        
+
         slots.push(texts)
       }
 
@@ -87,12 +88,15 @@ class Timetable {
         let lessonProlonged = false
 
         // to check if one of the previous lessons should be prolonged
-        const start = saturatingSub(
+        const invalid = saturatingSub(
           day.length,
           numberOfLessons + lastSlotLessons - 1,
         )
+        const start = Math.max(0, invalid)
+
         for (let index = start; index < day.length; index++) {
           const previousLesson = day[index]
+
           if (lesson.isContinuation(previousLesson)) {
             previousLesson.prolong()
             lessonProlonged = true

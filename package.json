@@ -7,6 +7,7 @@
     "build": "swc src -d dist",
     "build:watch": "swc src -d dist -w",
     "test": "pnpm build && node --test",
+    "test:watch": "pnpm build:watch && node --test --watch",
     "prepare": "husky install",
     "lint": "eslint --ext .ts,.tsx src",
     "format": "prettier --check --write \"{**/*,*}.{ts,tsx,md}\""
