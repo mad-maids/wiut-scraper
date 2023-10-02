@@ -31,7 +31,11 @@ async function main(page: Page): Promise<void> {
     }
   }
 
-  for (const group of codes.keys()) {
+  // Randomize order
+  const codesArray = Array.from(codes.keys())
+  codesArray.sort(() => Math.random() - 0.5)
+
+  for (const group of codesArray) {
     const timetable: Timetable = await instance.getTimetable(
       instance.getCode(group)!,
       page,
