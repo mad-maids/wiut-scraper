@@ -9,6 +9,10 @@ jobs:
   scrape:
     name: Scrape timetable
     runs-on: ubuntu-latest
+
+    permissions:
+      packages: write
+
     outputs:
       repo-updated: ${{ steps.git-step.outputs.updated }}
 
@@ -80,7 +84,7 @@ jobs:
           git add .
           [[ -z $(git status -uno --porcelain) ]] && echo "No updates detected, no need for push" && exit 0;
           git commit -m "update timetable $(date -u)"
-          git remote set-url origin https://x-access-token:${{ secrets.GH }}@github.com/mad-maids/wiut-data.git
+          # git remote set-url origin https://x-access-token:${{ secrets.GH }}@github.com/mad-maids/wiut-data.git
           git push origin main --force
           echo "::set-output name=updated::yes"
 
