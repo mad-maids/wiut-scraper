@@ -8,6 +8,7 @@ class Lesson {
   public start: number
   public tutor: string
   public length: number
+  public end: number
   public location: string
 
   constructor(start: number, data: string[]) {
@@ -19,7 +20,8 @@ class Lesson {
     this.type = format
     this.tutor = tutor
     this.start = start
-    this.length = start + 1.0
+    this.length = 1.0
+    this.end = start + 1.0
     this.location = location
   }
 
@@ -65,6 +67,7 @@ class Lesson {
   }
 
   prolong() {
+    this.end += 1.0
     this.length += 1.0
   }
 }
